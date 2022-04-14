@@ -14,6 +14,8 @@ knitr::opts_chunk$set(echo = T, message = F, warning = F)
 library(tidyverse)
 library(psych)
 library(data.table)
+library(GPArotation)
+library(lavaan)
 ```
 
 
@@ -24,9 +26,12 @@ set.seed(999)
 a = sample(data, 30) %>%
   na.omit()
 
+check_factorstructure(a)
+
 dataparallel <- fa.parallel(a, cor = "poly", fa = "pc")
 dataparallel$pc.values
 dataparallel$pc.sim
+
 
 
 res1 = fa(a, 4, cor = 'poly', rotate = 'geominQ', fm = 'wls')
@@ -35,7 +40,8 @@ res1
 res = fa(a, 5, cor = 'poly', rotate = 'geominQ', fm = 'wls')
 res
 
-
+res = fa(a, 6, cor = 'poly', rotate = 'geominQ', fm = 'wls')
+res2
 ```
 
 
