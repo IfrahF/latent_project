@@ -1,0 +1,41 @@
+---
+title: "R Notebook"
+output: html_notebook
+editor_options: 
+  chunk_output_type: inline
+---
+
+```{r}
+knitr::opts_chunk$set(echo = T, message = F, warning = F)
+```
+
+
+```{r}
+library(tidyverse)
+library(psych)
+library(data.table)
+```
+
+
+```{r}
+data = data.table(table)
+
+set.seed(999)
+a = sample(data, 30) %>%
+  na.omit()
+
+dataparallel <- fa.parallel(a, cor = "poly", fa = "pc")
+dataparallel$pc.values
+dataparallel$pc.sim
+
+
+res1 = fa(a, 4, cor = 'poly', rotate = 'geominQ', fm = 'wls')
+res1
+
+res = fa(a, 5, cor = 'poly', rotate = 'geominQ', fm = 'wls')
+res
+
+
+```
+
+
