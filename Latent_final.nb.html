@@ -239,19 +239,35 @@ library(lavaan)</code></pre>
 <!-- rnb-text-begin -->
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuY2hlY2tfZmFjdG9yc3RydWN0dXJlKGEpXG5cbmBgYCJ9 -->
-<pre class="r"><code>check_factorstructure(a)
-</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZGF0YSA9IGRhdGEudGFibGUodGFibGUpXG5cbnNldC5zZWVkKDk5OSlcbmEgPSBzYW1wbGUoZGF0YSwgMzApICU+JVxuICBuYS5vbWl0KClcblxuXG5cbmRhdGFwYXJhbGxlbCA8LSBmYS5wYXJhbGxlbChhLCBjb3IgPSBcInBvbHlcIiwgZmEgPSBcInBjXCIpXG5kYXRhcGFyYWxsZWwkcGMudmFsdWVzXG5kYXRhcGFyYWxsZWwkcGMuc2ltXG5cblxuXG5yZXMxID0gZmEoYSwgNCwgY29yID0gJ3BvbHknLCByb3RhdGUgPSAnZ2VvbWluUScsIGZtID0gJ3dscycpXG5yZXMxXG5cbnJlcyA9IGZhKGEsIDUsIGNvciA9ICdwb2x5Jywgcm90YXRlID0gJ2dlb21pblEnLCBmbSA9ICd3bHMnKVxucmVzXG5cbnJlcyA9IGZhKGEsIDYsIGNvciA9ICdwb2x5Jywgcm90YXRlID0gJ2dlb21pblEnLCBmbSA9ICd3bHMnKVxucmVzMlxuYGBgIn0= -->
+<pre class="r"><code>data = data.table(table)
+
+set.seed(999)
+a = sample(data, 30) %&gt;%
+  na.omit()
+
+
+
+dataparallel &lt;- fa.parallel(a, cor = &quot;poly&quot;, fa = &quot;pc&quot;)
+dataparallel$pc.values
+dataparallel$pc.sim
+
+
+
+res1 = fa(a, 4, cor = &#39;poly&#39;, rotate = &#39;geominQ&#39;, fm = &#39;wls&#39;)
+res1
+
+res = fa(a, 5, cor = &#39;poly&#39;, rotate = &#39;geominQ&#39;, fm = &#39;wls&#39;)
+res
+
+res = fa(a, 6, cor = &#39;poly&#39;, rotate = &#39;geominQ&#39;, fm = &#39;wls&#39;)
+res2</code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiRXJyb3IgaW4gY2hlY2tfZmFjdG9yc3RydWN0dXJlKGEpIDogXG4gIGNvdWxkIG5vdCBmaW5kIGZ1bmN0aW9uIFwiY2hlY2tfZmFjdG9yc3RydWN0dXJlXCJcbiJ9 -->
-<pre><code>Error in check_factorstructure(a) : 
-  could not find function &quot;check_factorstructure&quot;</code></pre>
-<!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <!-- rnb-text-end -->
 
-<div id="rmd-source-code">LS0tCnRpdGxlOiAiUiBOb3RlYm9vayIKb3V0cHV0OiBodG1sX25vdGVib29rCmVkaXRvcl9vcHRpb25zOiAKICBjaHVua19vdXRwdXRfdHlwZTogaW5saW5lCi0tLQoKYGBge3J9CmtuaXRyOjpvcHRzX2NodW5rJHNldChlY2hvID0gVCwgbWVzc2FnZSA9IEYsIHdhcm5pbmcgPSBGKQpgYGAKCgpgYGB7cn0KbGlicmFyeSh0aWR5dmVyc2UpCmxpYnJhcnkocHN5Y2gpCmxpYnJhcnkoZGF0YS50YWJsZSkKbGlicmFyeShHUEFyb3RhdGlvbikKbGlicmFyeShsYXZhYW4pCmBgYAoKCmBgYHtyfQpkYXRhID0gZGF0YS50YWJsZSh0YWJsZSkKCnNldC5zZWVkKDk5OSkKYSA9IHNhbXBsZShkYXRhLCAzMCkgJT4lCiAgbmEub21pdCgpCgpjaGVja19mYWN0b3JzdHJ1Y3R1cmUoYSkKCmRhdGFwYXJhbGxlbCA8LSBmYS5wYXJhbGxlbChhLCBjb3IgPSAicG9seSIsIGZhID0gInBjIikKZGF0YXBhcmFsbGVsJHBjLnZhbHVlcwpkYXRhcGFyYWxsZWwkcGMuc2ltCgoKCnJlczEgPSBmYShhLCA0LCBjb3IgPSAncG9seScsIHJvdGF0ZSA9ICdnZW9taW5RJywgZm0gPSAnd2xzJykKcmVzMQoKcmVzID0gZmEoYSwgNSwgY29yID0gJ3BvbHknLCByb3RhdGUgPSAnZ2VvbWluUScsIGZtID0gJ3dscycpCnJlcwoKcmVzID0gZmEoYSwgNiwgY29yID0gJ3BvbHknLCByb3RhdGUgPSAnZ2VvbWluUScsIGZtID0gJ3dscycpCnJlczIKYGBgCgoK</div>
+<div id="rmd-source-code">LS0tCnRpdGxlOiAiUiBOb3RlYm9vayIKb3V0cHV0OiBodG1sX25vdGVib29rCmVkaXRvcl9vcHRpb25zOiAKICBjaHVua19vdXRwdXRfdHlwZTogaW5saW5lCi0tLQoKYGBge3J9CmtuaXRyOjpvcHRzX2NodW5rJHNldChlY2hvID0gVCwgbWVzc2FnZSA9IEYsIHdhcm5pbmcgPSBGKQpgYGAKCgpgYGB7cn0KbGlicmFyeSh0aWR5dmVyc2UpCmxpYnJhcnkocHN5Y2gpCmxpYnJhcnkoZGF0YS50YWJsZSkKbGlicmFyeShHUEFyb3RhdGlvbikKbGlicmFyeShsYXZhYW4pCmBgYAoKCmBgYHtyfQpkYXRhID0gZGF0YS50YWJsZSh0YWJsZSkKCnNldC5zZWVkKDk5OSkKYSA9IHNhbXBsZShkYXRhLCAzMCkgJT4lCiAgbmEub21pdCgpCgoKCmRhdGFwYXJhbGxlbCA8LSBmYS5wYXJhbGxlbChhLCBjb3IgPSAicG9seSIsIGZhID0gInBjIikKZGF0YXBhcmFsbGVsJHBjLnZhbHVlcwpkYXRhcGFyYWxsZWwkcGMuc2ltCgoKCnJlczEgPSBmYShhLCA0LCBjb3IgPSAncG9seScsIHJvdGF0ZSA9ICdnZW9taW5RJywgZm0gPSAnd2xzJykKcmVzMQoKcmVzID0gZmEoYSwgNSwgY29yID0gJ3BvbHknLCByb3RhdGUgPSAnZ2VvbWluUScsIGZtID0gJ3dscycpCnJlcwoKcmVzID0gZmEoYSwgNiwgY29yID0gJ3BvbHknLCByb3RhdGUgPSAnZ2VvbWluUScsIGZtID0gJ3dscycpCnJlczIKYGBgCgoK</div>
 
 
 

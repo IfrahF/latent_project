@@ -26,7 +26,7 @@ set.seed(999)
 a = sample(data, 30) %>%
   na.omit()
 
-check_factorstructure(a)
+
 
 dataparallel <- fa.parallel(a, cor = "poly", fa = "pc")
 dataparallel$pc.values
