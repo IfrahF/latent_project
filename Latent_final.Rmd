@@ -22,6 +22,7 @@ library(see)
 library(performance)
 ```
 
+
 # Loading Data
 ```{r}
 data = load("Latent_data.RData") 
@@ -36,6 +37,7 @@ a = a %>%
 
 # check_factorstructure(a)
 ```
+
 
 
 ```{r}
