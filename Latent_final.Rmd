@@ -16,32 +16,119 @@ library(psych)
 library(data.table)
 library(GPArotation)
 library(lavaan)
+library(parameters)
+library(nFactors)
+library(see)
+library(performance)
+```
+
+# Loading Data
+```{r}
+data = load("Latent_data.RData") 
+
+set.seed(123)
+a = sample(table, 30) 
+
+a[] <- sapply(a, as.numeric) 
+
+a = a %>%
+  na.omit()
+
+check_factorstructure(a)
 ```
 
 
 ```{r}
-data = data.table(table)
-
-set.seed(999)
-a = sample(data, 30) %>%
-  na.omit()
-
-
-
-dataparallel <- fa.parallel(a, cor = "poly", fa = "pc")
-dataparallel$pc.values
-dataparallel$pc.sim
-
-
-
 res1 = fa(a, 4, cor = 'poly', rotate = 'geominQ', fm = 'wls')
 res1
 
 res = fa(a, 5, cor = 'poly', rotate = 'geominQ', fm = 'wls')
 res
 
-res = fa(a, 6, cor = 'poly', rotate = 'geominQ', fm = 'wls')
+res2 = fa(a, 6, cor = 'poly', rotate = 'geominQ', fm = 'wls')
 res2
 ```
+
+
+
+```{r}
+efa <- psych::fa(a, nfactors = 5) %>%
+  model_parameters(sort = TRUE, threshold = "max")
+
+efa
+```
+
+
+
+```{r}
+head(predict(efa, names = c("Neuroticism", "Conscientiousness", "Extraversion", "Agreeableness", "Opennness")), 5)
+```
+
+
+```{r}
+n <- n_factors(a)
+n
+
+plot(n) + theme_modern()
+```
+
+
+```{r}
+index <- datawizard::data_partition(a, training_proportion = 0.7, seed = 111)
+train.data <- index$training
+test.data <- index$test
+```
+
+
+```{r}
+structure_big5 <- psych::fa(train.data, nfactors = 5) %>%
+  efa_to_cfa()
+
+structure_big3 <- psych::fa(train.data, nfactors = 3) %>%
+  efa_to_cfa()
+
+structure_big5
+structure_big4
+```
+
+
+```{r}
+big5 <- lavaan::cfa(structure_big5, data = test.data)
+big3 <- lavaan::cfa(structure_big4, data = test.data)
+
+performance::compare_performance(big5, big4)
+```
+
+
+```{r}
+model_big5 <-
+  'MR1 =~ V315 + H1244 + H434 + H441 + V175 + N14
+   MR2 =~ X68 + H1048 + H658 + H477 + H336 + E123 + V119 + Q146
+   MR3 =~ X236 + H837 + H612 + Q251 + P492 + E146
+   MR4 =~ C3 + H86 + Q104 + R26 + H698
+   MR5 =~ Q68 + M29 + D107 + H1085 + Q29'
+
+#run model
+fit_std5 = cfa(model_big5, data = a, ordered = names(a), std.lv = TRUE)
+
+#inspect model output
+summary(fit_std5, rsquare = TRUE, fit.measures = TRUE)
+
+```
+
+
+```{r}
+model_big3 <-
+  'MR1 =~ V315 + C3 + Q68 + H1244 + H434 + E123 + H441 + V119 + V175 + N14 + H698
+   MR3 =~ X236 + H1048 + H658 + H837 + H477 + Q104 + H612 + Q146 + Q251 + P492 + E146
+   MR2 =~ X68 + H86 + H336 + M29 + D107 + H1085 + R26 + Q29'
+
+#run model
+fit_std3 = cfa(model_big3, data = a, ordered = names(a), std.lv = TRUE)
+
+#inspect model output
+summary(fit_std3, rsquare = TRUE, fit.measures = TRUE)
+```
+
 
 
