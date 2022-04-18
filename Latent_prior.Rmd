@@ -66,6 +66,28 @@ efa6
 ```
 
 
+# Their code
+```{r}
+head(predict(efa, names = c("Neuroticism", "Conscientiousness", "Extraversion", "Agreeableness", "Opennness")), 5)
+```
+
+
+```{r}
+n <- n_factors(a)
+n
+
+plot(n) + theme_modern()
+```
+
+
+
+```{r}
+index <- datawizard::data_partition(a, training_proportion = 0.7, seed = 111)
+train.data <- index$training
+test.data <- index$test
+```
+
+
 ```{r}
 structure_big5 <- psych::fa(a, nfactors = 5) %>%
   efa_to_cfa()
@@ -77,6 +99,13 @@ structure_big5
 structure_big3
 ```
 
+
+```{r}
+big5 <- lavaan::cfa(structure_big5, data = test.data)
+big3 <- lavaan::cfa(structure_big4, data = test.data)
+
+performance::compare_performance(big5, big4)
+```
 
 # Our code
 ```{r}
