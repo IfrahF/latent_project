@@ -1,12 +1,14 @@
 ---
 title: "R Notebook"
-output: html_notebook
-editor_options: 
-  chunk_output_type: inline
+output:
+  html_document:
+    df_print: paged
+editor_options:
+  chunk_output_type: console
 ---
 
 ```{r}
-knitr::opts_chunk$set(echo = T, message = F, warning = F)
+knitr::opts_chunk$set(echo = T, message = F, warning = F, dpi = 300)
 ```
 
 
@@ -21,9 +23,6 @@ library(nFactors)
 library(see)
 library(performance)
 ```
-
-- 2 diff samples
-- compare cfi and rmsea
 
 # Loading Data
 ```{r}
@@ -67,31 +66,28 @@ b2$pc.values
 b2$pc.sim
 
 # the number of components =  5 
-
-res = fa(a, 5, cor = 'poly', rotate = 'geominQ', fm = 'wls')
-res
-
-
-res2 = fa(a, 6, cor = 'poly', rotate = 'geominQ', fm = 'wls')
-res2
 ```
 
 
 
 ```{r}
-efa1 <- psych::fa(sample1, nfactors = 5) %>%
+efa1 <- psych::fa(sample1, nfactors = 5) 
+
+efa1 %>%
   model_parameters(sort = TRUE, threshold = "max")
 
-efa1
+summary(efa1, rsquare = TRUE, fit.measures = TRUE)
 
 # RMSEA:  0.033
 
-efa2 <- psych::fa(sample2, nfactors = 5) %>%
+efa2 <- psych::fa(sample2, nfactors = 5) 
+
+efa2 %>%
   model_parameters(sort = TRUE, threshold = "max")
 
 # RMSEA: 0.026
 
-summary(efa1, rsquare = TRUE, fit.measures = TRUE)
+summary(efa2, rsquare = TRUE, fit.measures = TRUE)
 ```
 
 
@@ -109,36 +105,35 @@ structure_big2
 
 # Our code
 ```{r}
-model_big5 <-
-  'MR1 =~ V315 + H1244 + H434 + H441 + V175 + N14
-   MR2 =~ X68 + H1048 + H658 + H477 + H336 + E123 + V119 + Q146
-   MR3 =~ X236 + H837 + H612 + Q251 + P492 + E146
-   MR4 =~ C3 + H86 + Q104 + R26 + H698
-   MR5 =~ Q68 + M29 + D107 + H1085 + Q29'
+model_1 <-
+  'MR2 =~ H456 + H942 + H1366 + H587 + H588 + H2016 + H2023 + H29 + H569
+   MR1 =~ H1026 + H2041 + H1135 + H1047 + H970
+   MR4 =~ H1267 + H664 + H442 + H855 + H1317 + H515
+   MR3 =~ H358 + H1171 + H1467 + H1342 + H691 + H573
+   MR5 =~ H275 + H129 + H859 + H761'
 
 #run model
-fit_std5 = cfa(model_big5, data = a, ordered = names(a), std.lv = TRUE)
+fit_std1 = cfa(model_1, data = sample1, ordered = names(a), std.lv = TRUE)
 
 #inspect model output
-summary(fit_std5, rsquare = TRUE, fit.measures = TRUE)
+summary(fit_std1, rsquare = TRUE, fit.measures = TRUE)
 ```
 
 
 # Our code
 ```{r}
-model_big6 <-
-  'MR3 =~ H837 + H477 + H612 + Q251 + P492 + E146
-   MR1 =~ V315 + C3 + Q104 + V119 + V175 + N14
-   MR5 =~ Q68 + H434 + M29 + D107 + H1085 + H698 + Q29
-   MR4 =~ H1048 + H86 + R26
-   MR2 =~ X68 + H658 + H336 + Q146
-   MR6 =~ X236 + H1244 + E123 + H441'
+model_2 <-
+  'MR1 =~ H158 + H517 + H54 + H2014 + H2017 + H1410 + H346
+   MR2 =~ H1460 + H1097 + H1066 + H975 + H1340 + H1179 + H315 + H967 + H1452
+   MR3 =~ H289 + H546 + H168 + H2027 + H275 + H1192 + H1164
+   MR5 =~ H1321 + H1227
+   MR4 =~ H100 + H660 + H2011 + H183 + H569'
 
 #run model
-fit_std6 = cfa(model_big6, data = a, ordered = names(a), std.lv = TRUE)
+fit_std2 = cfa(model_2, data = sample2, ordered = names(a), std.lv = TRUE)
 
 #inspect model output
-summary(fit_std6, rsquare = TRUE, fit.measures = TRUE)
+summary(fit_std2, rsquare = TRUE, fit.measures = TRUE)
 ```
 
 
