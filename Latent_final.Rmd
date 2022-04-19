@@ -22,28 +22,51 @@ library(see)
 library(performance)
 ```
 
+- 2 diff samples
+- compare cfi and rmsea
 
 # Loading Data
 ```{r}
 data = load("Latent_data.RData") 
 
+
+a = table %>%
+  dplyr::select(starts_with("H")) 
+
 set.seed(123)
-a = sample(table, 30) 
+sample1 = sample(a, 30) 
 
-a[] <- sapply(a, as.numeric) 
+sample1[] <- sapply(sample1, as.numeric) 
 
-a = a %>%
+sample1 = sample1 %>%
   na.omit()
 
-# check_factorstructure(a)
+set.seed(333)
+sample2 = sample(a, 30) 
+
+sample2[] <- sapply(sample2, as.numeric) 
+
+sample2 = sample2 %>%
+  na.omit()
+
+check_factorstructure(sample1)
+check_factorstructure(sample2)
 ```
 
 
 
 ```{r}
-b <- fa.parallel(a, cor = "poly", fa = "pc")
-b$pc.values
-b$pc.sim
+b1 <- fa.parallel(sample1, cor = "poly", fa = "pc")
+b1$pc.values
+b1$pc.sim
+
+# the number of components =  5 
+
+b2 <- fa.parallel(sample2, cor = "poly", fa = "pc")
+b2$pc.values
+b2$pc.sim
+
+# the number of components =  5 
 
 res = fa(a, 5, cor = 'poly', rotate = 'geominQ', fm = 'wls')
 res
@@ -56,27 +79,31 @@ res2
 
 
 ```{r}
-efa <- psych::fa(a, nfactors = 5) %>%
+efa1 <- psych::fa(sample1, nfactors = 5) %>%
   model_parameters(sort = TRUE, threshold = "max")
 
-efa
+efa1
 
-efa6 <- psych::fa(a, nfactors = 6) %>%
+# RMSEA:  0.033
+
+efa2 <- psych::fa(sample2, nfactors = 5) %>%
   model_parameters(sort = TRUE, threshold = "max")
 
-efa6
+# RMSEA: 0.026
+
+summary(efa1, rsquare = TRUE, fit.measures = TRUE)
 ```
 
 
 ```{r}
-structure_big5 <- psych::fa(a, nfactors = 5) %>%
+structure_big1 <- psych::fa(sample1, nfactors = 5) %>%
   efa_to_cfa()
 
-structure_big3 <- psych::fa(a, nfactors = 6) %>%
+structure_big2 <- psych::fa(sample2, nfactors = 5) %>%
   efa_to_cfa()
 
-structure_big5
-structure_big3
+structure_big1
+structure_big2
 ```
 
 
